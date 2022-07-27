@@ -17,6 +17,10 @@ export class ClubService {
     return this.clubRepository.findClubOne(clubId);
   }
 
+  async addClubInfo(clubId, createSuggestionDto){
+    return this.clubRepository.saveClubInfo(clubId, createSuggestionDto);
+  }
+
   async addSuggestion(createSuggestionDto) {
     return this.clubRepository.saveSuggestion(createSuggestionDto);
   }
