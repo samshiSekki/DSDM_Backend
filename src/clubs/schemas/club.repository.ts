@@ -47,4 +47,8 @@ export class ClubRepository {
     suggestion.save();
     return suggestion;
   }
+
+  async findAllClub(){
+    return await this.clubModel.find();
+  }
 }
