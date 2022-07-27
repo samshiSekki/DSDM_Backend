@@ -2,12 +2,14 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateClubDto } from 'src/dto/CreateClubDto.dto';
 import { Club, ClubDocument } from './club.entity';
+import { Suggestion, SuggestionDocument } from './suggestion.entitiy';
 
 export class ClubRepository {
   constructor(
     @InjectModel(Club.name)
     private clubModel: Model<ClubDocument>,
-
+    @InjectModel(Suggestion.name)
+    private suggestionModel: Model<SuggestionDocument>,
   ) {}
     
   async saveClub(createClubDto: CreateClubDto){
@@ -32,9 +34,9 @@ export class ClubRepository {
     return result;
   }
 
-  
-
-  // async saveClubInfo(): Promise<String> {
-    
-  // }
+  async saveSuggestion(createSuggestionDto) {
+    const suggestion = await new this.suggestionModel(createSuggestionDto);
+    suggestion.save();
+    return suggestion;
+  }
 }

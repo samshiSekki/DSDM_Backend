@@ -17,7 +17,7 @@ export class ClubService {
     return this.clubRepository.findClubOne(clubId);
   }
 
-  // async addClubInfo(): Promise<String> {
-  //   return this.clubRepository.saveClubInfo();
-  // }
+  async addSuggestion(createSuggestionDto) {
+    return this.clubRepository.saveSuggestion(createSuggestionDto);
+  }
 }
