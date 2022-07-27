@@ -1,9 +1,11 @@
-import { Controller, Get, Post, Res, Param, NotFoundException, HttpStatus } from "@nestjs/common";
+import { Controller, Get, Post, Res, Param, NotFoundException, HttpStatus, Body } from "@nestjs/common";
 import { ExcelService } from "src/excel/excel.service";
 import { ApiTags, ApiBody, ApiResponse,ApiCreatedResponse, ApiParam, ApiOperation} from '@nestjs/swagger';
 import { ClubService } from "./club.service";
 import { Club } from "./club.entity";
 import { ClubDetailDto } from "src/dto/ClubDetailDto.dto";
+import { Suggestion } from "./suggestion.entitiy";
+import { CreateSuggestionDto } from "src/dto/CreateSuggestionDto.dto";
 
 @Controller()
 export class ClubController {
@@ -35,12 +37,13 @@ export class ClubController {
     return res.status(HttpStatus.OK).json({club, recommendClub});
   }
 
-  // @Post('clubs')
-  // @ApiOperation({ summary: '동아리 요청사항 전송 API',})
-  // @ApiResponse({ status: 201, type: String })
-  // async addClubInfo(@Res() res) {
-  //   const club = await this.clubService.addClubInfo();
-  // }
+  @Post('clubs')
+  @ApiOperation({ summary: '동아리 요청사항 전송 API'})
+  @ApiResponse({ status: 201, type: Suggestion })
+  async addSuggetion(@Body() createSuggestionDto:CreateSuggestionDto, @Res() res) {
+    const suggestion = await this.clubService.addSuggestion(createSuggestionDto);
+    return res.status(HttpStatus.CREATED).json(suggestion);
+  }
 
   @Get("/clubs")
   getClubs(){

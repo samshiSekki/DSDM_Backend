@@ -8,6 +8,7 @@ import { ClubService } from './clubs/schemas/club.service';
 import { ExcelService } from './excel/excel.service';
 import { Club, ClubSchema } from './clubs/schemas/club.entity';
 import { ClubRepository } from './clubs/schemas/club.repository';
+import { Suggestion, SuggestionSchema } from './clubs/schemas/suggestion.entitiy';
 
 @Module({
   imports: [
@@ -18,7 +19,7 @@ import { ClubRepository } from './clubs/schemas/club.repository';
       }),
     }),
     MongooseModule.forFeature([{ name: Club.name, schema: ClubSchema }]),
-
+    MongooseModule.forFeature([{ name: Suggestion.name, schema: SuggestionSchema}]),
   ],
   controllers: [AppController, ClubController],
   providers: [AppService, ClubService, ClubRepository, ExcelService],
