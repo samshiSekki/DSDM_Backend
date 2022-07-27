@@ -24,4 +24,8 @@ export class ClubService {
   async addSuggestion(createSuggestionDto) {
     return this.clubRepository.saveSuggestion(createSuggestionDto);
   }
+
+  async getClubs() {
+    return this.clubRepository.findAllClub();
+  }
 }

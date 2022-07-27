@@ -56,6 +56,6 @@ export class ClubController {
 
   @Get("/clubs")
   getClubs(){
-    // this.clubService.getClubs();
+    return this.clubService.getClubs();
   }
 }
