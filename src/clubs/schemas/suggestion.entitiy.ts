@@ -19,6 +19,13 @@ export class Suggestion {
   })
   @Prop()
   content: string;
+
+  @ApiProperty({
+    type: String,
+    description: '동아리 이름'
+  })
+  @Prop({default:null})
+  name: string;
 }
 
 export const SuggestionSchema = SchemaFactory.createForClass(Suggestion);

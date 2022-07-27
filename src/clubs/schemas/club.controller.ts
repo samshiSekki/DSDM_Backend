@@ -20,6 +20,15 @@ export class ClubController {
     this.excelService.readExcelFile();
   }
 
+  @Post('/clubs')
+  @ApiOperation({ summary: '동아리 요청사항 전송 API(메인페이지)'})
+  @ApiResponse({ status: 201, type: Suggestion })
+  async addSuggetion(@Body() createSuggestionDto:CreateSuggestionDto, @Res() res) {
+    const suggestion = await this.clubService.addSuggestion(createSuggestionDto);
+    return res.status(HttpStatus.CREATED).json(suggestion);
+  }
+
+
   @Get('clubs/:id')
   @ApiOperation({ summary: '동아리 상세페이지 조회 API',})
   @ApiResponse({ status: 200, type: ClubDetailDto })
@@ -37,11 +46,11 @@ export class ClubController {
     return res.status(HttpStatus.OK).json({club, recommendClub});
   }
 
-  @Post('clubs')
-  @ApiOperation({ summary: '동아리 요청사항 전송 API'})
+  @Post('/clubs/:id')
+  @ApiOperation({ summary: '동아리 요청사항 전송 API(상세페이지)'})
   @ApiResponse({ status: 201, type: Suggestion })
-  async addSuggetion(@Body() createSuggestionDto:CreateSuggestionDto, @Res() res) {
-    const suggestion = await this.clubService.addSuggestion(createSuggestionDto);
+  async addClubInfo(@Param('id') clubId: string, @Body() createSuggestionDto:CreateSuggestionDto, @Res() res) {
+    const suggestion = await this.clubService.addClubInfo(clubId, createSuggestionDto);
     return res.status(HttpStatus.CREATED).json(suggestion);
   }
 

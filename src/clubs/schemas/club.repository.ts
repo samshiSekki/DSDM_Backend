@@ -34,6 +34,14 @@ export class ClubRepository {
     return result;
   }
 
+  async saveClubInfo(clubId, createSuggestionDto) {
+    const club = await this.clubModel.findById(clubId);
+    createSuggestionDto.name = club.name;
+    const suggestion = await new this.suggestionModel(createSuggestionDto);
+    suggestion.save();
+    return suggestion;
+  }
+
   async saveSuggestion(createSuggestionDto) {
     const suggestion = await new this.suggestionModel(createSuggestionDto);
     suggestion.save();
