@@ -22,13 +22,13 @@ export class Club {
   name: string
 
   @ApiProperty({
-    // type: Array,
-    type: String,
+    type: Array,
+    // type: String,
     description: '동아리 카테고리'
   })
   @Prop()
-  // category: string[]
-  category: string // ** 소분류로도 필터링 가능한지 물어보고 배열로 변경
+  category: string[]
+  // category: string // ** 소분류로도 필터링 가능한지 물어보고 배열로 변경
 
   @ApiProperty({
     type: String,
