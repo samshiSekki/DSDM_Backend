@@ -1,7 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 import * as mongoose from 'mongoose';
-import internal from 'stream';
 
 export type ClubDocument = Club & Document;
 
@@ -23,12 +22,17 @@ export class Club {
 
   @ApiProperty({
     type: Array,
-    // type: String,
-    description: '동아리 카테고리'
+    description: '동아리 대분류 카테고리'
   })
   @Prop()
-  category: string[]
-  // category: string // ** 소분류로도 필터링 가능한지 물어보고 배열로 변경
+  mainCategory: string
+
+  @ApiProperty({
+    type: Array,
+    description: '동아리 세부 카테고리'
+  })
+  @Prop()
+  subCategory: string[];
 
   @ApiProperty({
     type: String,
@@ -38,11 +42,11 @@ export class Club {
   target: string
 
   @ApiProperty({
-    type: String,
-    description: '모집 중 여부'
+    type: Boolean,
+    description: '모집중 여부'
   })
   @Prop()
-  recruiting: string // ** boolean 으로 처리
+  recruiting: boolean // 모집중: true / 마감:false
 
   @ApiProperty({
     type: String,
@@ -59,11 +63,11 @@ export class Club {
   membershipFee: string
 
   @ApiProperty({
-    type: String,
-    description: '온/오프'
+    type: Number,
+    description: '온/오프라인'
   })
   @Prop()
-  online: string // ** 숫자로 변경 1. 병행 2. 온라인 3. 오프라인
+  online: number // ** 숫자로 변경 1. 병행 2. 온라인 3. 오프라인
 
   @ApiProperty({
     type: String,
@@ -87,11 +91,11 @@ export class Club {
   introduction: string // ** 긴 텍스트 필요한지 확인
 
   @ApiProperty({
-    type: String,
+    type: Array,
     description: '특이사항'
   })
   @Prop()
-  uniqueness: string // ** 배열로 변경
+  uniqueness: string[]
 
   @ApiProperty({
     type: String,
@@ -136,11 +140,11 @@ export class Club {
   competition: string
 
   @ApiProperty({
-    type: String,
+    type: Array,
     description: '후기'
   })
   @Prop()
-  reviews: string // ** 배열로 변경
+  reviews: string[] 
 
   @ApiProperty({
     type: String,
@@ -148,6 +152,12 @@ export class Club {
   })
   @Prop()
   applyUrl: string
-}
 
+  @ApiProperty({
+    type: String,
+    description: '동아리 로고'
+  })
+  @Prop()
+  logoUrl: string
+}
 export const ClubSchema = SchemaFactory.createForClass(Club);

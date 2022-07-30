@@ -1,4 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { plainToClass } from 'class-transformer';
+import { Club } from 'src/clubs/schemas/club.entity';
 import { ClubRepository } from 'src/clubs/schemas/club.repository';
 
 @Injectable()
@@ -10,28 +12,89 @@ export class ExcelService {
  
     xlsxFile(`./${process.env.FILE}`).then((rows) => {
       for(let i in rows){
-        const club = {
-          "name": rows[i][0],
-          "category": rows[i][1],
-          "target": rows[i][2],
-          "recruiting": rows[i][3],
-          "deadline": rows[i][4],
-          "membershipFee": rows[i][5],
-          "online": rows[i][6],
-          "location": rows[i][7],
-          "period": rows[i][8],
-          "introduction": rows[i][9],
-          "uniqueness": rows[i][10],
-          "siteAddress": rows[i][11],
-          "snsAddress": rows[i][12],
-          "activityDay": rows[i][13],
-          "selectionProcess": rows[i][14],
-          "personnel": rows[i][15],
-          "competition": rows[i][16],
-          "reviews": rows[i][17],
-          "applyUrl": rows[i][18],
+        let name = rows[i][0];
+        let mainCategory = rows[i][1];
+        let categories = rows[i][2].split("/")
+
+        let finalCategory = new Array();
+
+        for(let category of categories){
+          if(category.includes("(")) {
+            let start = category.indexOf("(")
+            let middleCategory = category.substring(0, start) // 중분류 (개발, 디자인 ...)
+            let subCategories = category.substring(start+1, category.length-1).split(", ") // 소분류 (백엔드, 프론트엔드, 안드로이드 ...)
+              
+            let subArray = new Array();
+            for(let subCategory of subCategories){ // 소분류 (백엔드, 프론트엔드, 안드로이드 ...)
+              subArray.push(subCategory);
+            }
+
+            let subObject = new Object();
+            subObject[middleCategory] = subArray;
+            finalCategory.push(subObject);
+          }
+          else
+            finalCategory.push(category)
         }
-        this.clubRepository.saveClub(club);
+        let target = rows[i][3];
+        let recruiting = rows[i][4] == '모집중' ? true : false;          
+        let deadline = rows[i][5];
+        let membershipFee = rows[i][6];
+        let online = rows[i][7];
+        
+        if(online == '온라인')
+          online = 1;
+        else if(online == '오프라인')
+          online = 2;
+        else if(online == '온/오프라인')
+          online = 3;
+
+        let location = rows[i][8];
+        let period = rows[i][9];
+        let introduction = rows[i][10];
+        let uniqueness = (rows[i][11] || '').split("\n");
+        let uniqueObject = new Array();
+        for(let unique of uniqueness){
+          uniqueObject.push(unique)
+        }
+        let siteAddress = rows[i][12];
+        let snsAddress = rows[i][13];
+        let activityDay = rows[i][14];
+        let selectionProcess = rows[i][15];
+        let personnel = rows[i][16];
+        let competition = rows[i][17];
+        let reviews = rows[i][18].split("\n");
+        let reviewObject = new Array();
+        for(let review of reviews){
+          reviewObject.push(review)
+        }
+        let applyUrl = rows[i][19]
+        let logoUrl = rows[i][20]
+
+        const club = {
+          "name": name,
+          "mainCategory": mainCategory,
+          "subCategory": finalCategory,
+          "target": target,
+          "recruiting": recruiting,
+          "deadline": deadline,
+          "membershipFee": membershipFee,
+          "online": online,
+          "location": location,
+          "period": period,
+          "introduction": introduction,
+          "uniqueness": uniqueness,
+          "siteAddress": siteAddress,
+          "snsAddress": snsAddress,
+          "activityDay": activityDay,
+          "selectionProcess": selectionProcess,
+          "personnel": personnel,
+          "competition": competition,
+          "reviews": reviews,
+          "applyUrl": applyUrl,
+          "logoUrl": logoUrl
+        }
+        this.clubRepository.saveClub(plainToClass(Club, club));
       }
     })
   }

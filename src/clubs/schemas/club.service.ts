@@ -4,14 +4,9 @@ import { Club } from './club.entity';
 
 @Injectable()
 export class ClubService {
-
   constructor(
     private readonly clubRepository: ClubRepository
   ){}
-
-  getHello(): string {
-    return 'Hello World!';
-  }
 
   async getClubOne(clubId): Promise<any> {
     return this.clubRepository.findClubOne(clubId);
