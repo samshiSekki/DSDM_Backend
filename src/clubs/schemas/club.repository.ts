@@ -16,6 +16,10 @@ export class ClubRepository {
     const club = new this.clubModel(createClubDto);
     club.save();
   }
+
+  async findAllClub(){
+    return await this.clubModel.find();
+  }
   
   async findClubOne(clubId): Promise<any> {
     let result: any[] = [];
@@ -24,7 +28,7 @@ export class ClubRepository {
 
     //해당 동아리 제외하고 같은 카테고리 내에서 랜덤추출 3개
     const recommend = await this.clubModel.aggregate([
-      { $match: {name: {$ne: club.name}, category: club.category[0]}},
+      { $match: {name: {$ne: club.name}, category: club.mainCategory}},
       // { $match: {name: {$ne: club.name}, category: club.category}},
       { $sample: { size: 3}},
       { $project: {_id:1, name: 1}},
@@ -46,9 +50,5 @@ export class ClubRepository {
     const suggestion = await new this.suggestionModel(createSuggestionDto);
     suggestion.save();
     return suggestion;
-  }
-
-  async findAllClub(){
-    return await this.clubModel.find();
   }
 }

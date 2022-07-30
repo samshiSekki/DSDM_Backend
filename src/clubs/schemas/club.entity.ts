@@ -21,18 +21,18 @@ export class Club {
   name: string
 
   @ApiProperty({
-    type: String,
-    description: '동아리 로고'
+    type: Array,
+    description: '동아리 대분류 카테고리'
   })
   @Prop()
-  logoUrl: string
+  mainCategory: string
 
   @ApiProperty({
     type: Array,
-    description: '동아리 카테고리'
+    description: '동아리 세부 카테고리'
   })
   @Prop()
-  category: string[]
+  subCategory: string[][]
   // category: string // ** 소분류로도 필터링 가능한지 물어보고 배열로 변경
 
   @ApiProperty({
@@ -153,6 +153,13 @@ export class Club {
   })
   @Prop()
   applyUrl: string
+
+  @ApiProperty({
+    type: String,
+    description: '동아리 로고'
+  })
+  @Prop()
+  logoUrl: string
 }
 
 export const ClubSchema = SchemaFactory.createForClass(Club);
