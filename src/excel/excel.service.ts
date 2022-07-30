@@ -1,4 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { plainToClass } from 'class-transformer';
+import { Club } from 'src/clubs/schemas/club.entity';
 import { ClubRepository } from 'src/clubs/schemas/club.repository';
 
 @Injectable()
@@ -12,28 +14,28 @@ export class ExcelService {
       for(let i in rows){
         let name = rows[i][0];
         let mainCategory = rows[i][1];
-        let subCategories = rows[i][2].split("/")
+        let categories = rows[i][2].split("/")
 
-        let cate = new Array();
+        let finalCategory = new Array();
 
-        for(let subCategory of subCategories){
-          if(subCategory.includes("(")) {
-            let start = subCategory.indexOf("(")
-            let category = subCategory.substring(0, start) // 중분류 (개발, 디자인 ...)
-            
-            let objects = subCategory.substring(start+1, subCategory.length-1).split(", ")
+        for(let category of categories){
+          if(category.includes("(")) {
+            let start = category.indexOf("(")
+            let middleCategory = category.substring(0, start) // 중분류 (개발, 디자인 ...)
+            let subCategories = category.substring(start+1, category.length-1).split(", ") // 소분류 (백엔드, 프론트엔드, 안드로이드 ...)
               
-            let subzz = new Array();
-            for(let object of objects){ // 소분류 (백엔드, 프론트엔드, 안드로이드 ...)
-              subzz.push(object);
+            let subArray = new Array();
+            for(let subCategory of subCategories){ // 소분류 (백엔드, 프론트엔드, 안드로이드 ...)
+              subArray.push(subCategory);
             }
-            subCategory = new Object();
-            subCategory[category] = subzz;
-            
+
+            let subObject = new Object();
+            subObject[middleCategory] = subArray;
+            finalCategory.push(subObject);
           }
-          cate.push(subCategory)
+          else
+            finalCategory.push(category)
         }
-        console.log(cate)
         let target = rows[i][3];
         let recruiting = rows[i][4] == '모집중' ? true : false;          
         let deadline = rows[i][5];
@@ -71,8 +73,8 @@ export class ExcelService {
 
         const club = {
           "name": name,
-          "mainCategory":mainCategory,
-          "subCategory": cate,
+          "mainCategory": mainCategory,
+          "subCategory": finalCategory,
           "target": target,
           "recruiting": recruiting,
           "deadline": deadline,
@@ -92,7 +94,7 @@ export class ExcelService {
           "applyUrl": applyUrl,
           "logoUrl": logoUrl
         }
-       this.clubRepository.saveClub(club);
+        this.clubRepository.saveClub(plainToClass(Club, club));
       }
     })
   }

@@ -1,6 +1,6 @@
 import { InjectModel } from '@nestjs/mongoose';
+import { instanceToPlain } from 'class-transformer';
 import { Model } from 'mongoose';
-import { CreateClubDto } from 'src/dto/CreateClubDto.dto';
 import { Club, ClubDocument } from './club.entity';
 import { Suggestion, SuggestionDocument } from './suggestion.entitiy';
 
@@ -11,14 +11,35 @@ export class ClubRepository {
     @InjectModel(Suggestion.name)
     private suggestionModel: Model<SuggestionDocument>,
   ) {}
-    
-  async saveClub(createClubDto: CreateClubDto){
-    const club = new this.clubModel(createClubDto);
-    club.save();
-  }
 
   async findAllClub(){
-    return await this.clubModel.find();
+    const clubs = await this.clubModel.find();
+    const allClub = new Object();   
+
+    for(let club of clubs){
+      const {mainCategory} = club;
+      allClub[mainCategory] = new Array();
+    }
+
+    for(let club of clubs){
+      const {name, recruiting, subCategory, membershipFee, online, period, activityDay, selectionProcess} = club;
+      const clubInfo = {
+          name,
+          subCategory,
+          recruiting: (recruiting == true) ?'모집중':'마감',
+          membershipFee,
+          online: (online == 1)?'온라인':((online==2)?'오프라인':'온/오프라인'),
+          period,
+          activityDay,
+          selectionProcess
+      }
+      allClub[club.mainCategory].push(clubInfo)
+    }
+    return allClub;
+  }
+
+  async saveClub(club: Club){
+    await this.clubModel.create(club);
   }
   
   async findClubOne(clubId): Promise<any> {

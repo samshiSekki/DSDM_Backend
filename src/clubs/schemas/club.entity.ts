@@ -32,8 +32,7 @@ export class Club {
     description: '동아리 세부 카테고리'
   })
   @Prop()
-  subCategory: string[][]
-  // category: string // ** 소분류로도 필터링 가능한지 물어보고 배열로 변경
+  subCategory: string[];
 
   @ApiProperty({
     type: String,
@@ -161,5 +160,4 @@ export class Club {
   @Prop()
   logoUrl: string
 }
-
 export const ClubSchema = SchemaFactory.createForClass(Club);
