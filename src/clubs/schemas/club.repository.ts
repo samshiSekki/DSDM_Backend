@@ -49,12 +49,11 @@ export class ClubRepository {
 
     //해당 동아리 제외하고 같은 카테고리 내에서 랜덤추출 3개
     const recommend = await this.clubModel.aggregate([
-      { $match: {name: {$ne: club.name}, category: club.mainCategory}},
-      // { $match: {name: {$ne: club.name}, category: club.category}},
-      { $sample: { size: 3}},
-      { $project: {_id:1, name: 1}},
+      { $match: {name: {$ne: club.name}, mainCategory: club.mainCategory}},
+      { $sample: { size: 5}},
+      { $project: {_id:1, name: 1, logoUrl:1 }},
     ])
-    
+
     result.push(recommend);
     return result;
   }
