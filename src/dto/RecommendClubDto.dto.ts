@@ -16,4 +16,10 @@ export class RecommendClubDto{
     })
     readonly name:string;
 
+    @ApiProperty({
+        type: String,
+        description: '동아리 로고 URL'
+    })
+    readonly logoUrl:string;
+
 }
