@@ -1,5 +1,4 @@
 import { InjectModel } from '@nestjs/mongoose';
-import { instanceToPlain } from 'class-transformer';
 import { Model } from 'mongoose';
 import { Club, ClubDocument } from './club.entity';
 import { Suggestion, SuggestionDocument } from './suggestion.entitiy';
@@ -22,8 +21,9 @@ export class ClubRepository {
     }
 
     for(let club of clubs){
-      const {name, recruiting, subCategory, membershipFee, online, period, activityDay, selectionProcess} = club;
+      const {clubId, name, recruiting, subCategory, membershipFee, online, period, activityDay, selectionProcess} = club;
       const clubInfo = {
+          clubId,
           name,
           subCategory,
           recruiting: (recruiting == true) ?'모집중':'마감',
@@ -42,9 +42,9 @@ export class ClubRepository {
     await this.clubModel.create(club);
   }
   
-  async findClubOne(clubId): Promise<any> {
+  async findClubOne(clubId: number): Promise<any> {
     let result: any[] = [];
-    const club = await this.clubModel.findById(clubId);
+    const club = await this.clubModel.findOne({clubId});
     result.push(club);
 
     //해당 동아리 제외하고 같은 카테고리 내에서 랜덤추출 3개

@@ -7,21 +7,4 @@ export class ClubDto {
     period: string
     activityDay: string
     selectionProcess: string
-    // get getOnAndOff(): string {
-    //   let onlineStatus = this.online;
-    //   if(onlineStatus == 1)
-    //     return '온라인'
-    //   else if(onlineStatus == 2)
-    //     return '오프라인'
-    //   else if(onlineStatus == 3)
-    //     return '온/오프라인' 
-    // }
-  
-    // get getRecruting(): string {
-    //   let recruitStatus = this.recruiting
-    //   if(recruitStatus == true)
-    //     return '모집중'
-    //   else 
-    //     return '마감'
-    // }
-  }
+}
