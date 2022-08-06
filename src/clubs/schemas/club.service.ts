@@ -1,6 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Query } from '@nestjs/common';
 import { ClubRepository } from './club.repository';
-import { Club } from './club.entity';
 
 @Injectable()
 export class ClubService {
@@ -8,7 +7,7 @@ export class ClubService {
     private readonly clubRepository: ClubRepository
   ){}
 
-  async getClubOne(clubId): Promise<any> {
+  async getClubOne(clubId: number): Promise<any> {
     return this.clubRepository.findClubOne(clubId);
   }
 
@@ -20,7 +19,11 @@ export class ClubService {
     return this.clubRepository.saveSuggestion(createSuggestionDto);
   }
 
-  async getClubs() {
+  async getClubs(@Query() query) {
+    // const { category, recruiting, period, activityDay, online } = query;
+    // if(category)
+
+    //   await this.clubRepository.
     return this.clubRepository.findAllClub();
   }
 }

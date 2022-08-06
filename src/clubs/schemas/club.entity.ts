@@ -14,6 +14,13 @@ export class Club {
   _id: string;
 
   @ApiProperty({
+    type: Number,
+    description: '동아리 번호'
+  })
+  @Prop()
+  clubId: number;
+
+  @ApiProperty({
     type: String,
     description: '동아리 이름'
   })

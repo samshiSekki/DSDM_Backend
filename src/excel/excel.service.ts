@@ -72,6 +72,7 @@ export class ExcelService {
         let logoUrl = rows[i][20]
 
         const club = {
+          "clubId": Number(i)+Number(1),
           "name": name,
           "mainCategory": mainCategory,
           "subCategory": finalCategory,
