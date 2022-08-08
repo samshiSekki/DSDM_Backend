@@ -51,7 +51,7 @@ export class ClubRepository {
     const recommend = await this.clubModel.aggregate([
       { $match: {name: {$ne: club.name}, mainCategory: club.mainCategory}},
       { $sample: { size: 5}},
-      { $project: {_id:1, name: 1, logoUrl:1 }},
+      { $project: {_id:0, clubId:1, name: 1, logoUrl:1 }},
     ])
 
     result.push(recommend);
