@@ -36,8 +36,10 @@ export class ClubController {
   @Get("/clubs/today")
   @ApiOperation({summary: '오늘 마감인 동아리 조회 API'})
   @ApiResponse({status: 200})
-  async getClubsToday(){
-    return this.clubService.getClubsToday();
+  async getClubsToday(@Res() res){
+    const todayClub = await this.clubService.getClubsToday();
+    // if(todayClub?.length)
+    return res.status(HttpStatus.OK).json({todayClub});
   }
 
   @Post('/clubs')
