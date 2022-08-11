@@ -26,4 +26,8 @@ export class ClubService {
     //   await this.clubRepository.
     return this.clubRepository.findAllClub();
   }
+
+  async getClubsToday() {
+    return this.clubRepository.findClubToday();
+  }
 }
