@@ -81,4 +81,8 @@ export class ClubService {
     return allClubs
     }
   }
+
+  async getClubsToday() {
+    return this.clubRepository.findClubToday();
+  }
 }
