@@ -39,16 +39,18 @@ export class ClubRepository {
   }
 
   async findClubToday(){
-    const today = new Date().toDateString();
-    console.log(today)
+    const day = new Date()
+    const year = day.getFullYear();
+    const month = day.getMonth() + 1;
+    const date = day.getDate();
+
+    const today = `${year}-${month >= 10 ? month : '0' + month}-${date >= 10 ? date : '0' + date}`;
 
     //해당 동아리 제외하고 같은 카테고리 내에서 랜덤추출 3개
     const clubToday = await this.clubModel.aggregate([
       { $match: {deadline: today}},
       { $project: {_id:0, clubId:1, name: 1}},
     ])
-
-    console.log(clubToday)
 
     return clubToday;
 
