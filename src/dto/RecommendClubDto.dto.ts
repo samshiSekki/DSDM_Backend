@@ -1,14 +1,12 @@
-import { Club } from "src/clubs/schemas/club.entity";
 import { ApiProperty } from "@nestjs/swagger";
-import mongoose from "mongoose";
 
 export class RecommendClubDto{
 
     @ApiProperty({
-        type: mongoose.Schema.Types.ObjectId,
-        description: '동아리 Object id'
+        type: Number,
+        description: '동아리 Id'
     })
-    readonly id:string;
+    readonly clubId:number;
 
     @ApiProperty({
         type: String,
