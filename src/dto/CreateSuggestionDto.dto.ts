@@ -14,3 +14,12 @@ export class CreateSuggestionDto {
     })
   name:string
 }
+
+export class CreateSuggestionByClubDto {
+
+  @ApiProperty({
+      type: String,
+      description: '요청 사항 내용'
+      })
+    content: string
+  }
