@@ -20,17 +20,10 @@ export class ClubController {
     await this.excelService.readExcelFile();
   }
 
-//   대분류 (IT, 경제/경영 .. ) ?category='뭐시기'&recruiting='true'
-// 모집중여부 (모집중, 마감)
-// 활동기간  (3개월 6개월 1년)
-// 활동 요일 ()
-// 온/오프라인 (온/오프라인 , 오프라인, 온라인)
   @Get("/clubs")
   @ApiOperation({summary: '동아리 전체 목록 조회 API'})
   @ApiResponse({status: 200})
   async getClubs(@Query() query){
-    // const { category, recruiting, period, activityDay, online } = query;
-
     return this.clubService.getClubs(query);
   }
 

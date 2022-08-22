@@ -10,7 +10,7 @@ export class ExcelService {
   async readExcelFile(){
     const xlsxFile = require('read-excel-file/node');
  
-    xlsxFile(`./${process.env.FILE}`).then((rows) => {
+    xlsxFile(`./${process.env.FILE}`).then((rows: { [x: string]: any[]; }): void => {
       for(let i in rows){
         let name = rows[i][0];
         let mainCategory = rows[i][1];
@@ -63,7 +63,7 @@ export class ExcelService {
         let selectionProcess = rows[i][15];
         let personnel = rows[i][16];
         let competition = rows[i][17];
-        let reviews = rows[i][18].split("\n");
+        let reviews = (rows[i][18] || '').split("\n");
         let reviewObject = new Array();
         for(let review of reviews){
           reviewObject.push(review)

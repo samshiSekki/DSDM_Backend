@@ -11,6 +11,10 @@ export class ClubRepository {
     private suggestionModel: Model<SuggestionDocument>,
   ) {}
 
+  async getAllClub(){
+    return await this.clubModel.find();
+  }
+
   async findAllClub(){
     const clubs = await this.clubModel.find();
     const allClub = new Object();   
