@@ -26,6 +26,15 @@ export class ClubController {
     return this.clubService.getClubs(query);
   }
 
+  @Get("/clubs/today")
+  @ApiOperation({summary: '오늘 마감인 동아리 조회 API'})
+  @ApiResponse({status: 200})
+  async getClubsToday(@Res() res){
+    const todayClub = await this.clubService.getClubsToday();
+    // if(todayClub?.length)
+    return res.status(HttpStatus.OK).json({todayClub});
+  }
+
   @Post('/clubs')
   @ApiOperation({ summary: '동아리 요청사항 전송 API(메인페이지)'})
   @ApiResponse({ status: 201, type: Suggestion })

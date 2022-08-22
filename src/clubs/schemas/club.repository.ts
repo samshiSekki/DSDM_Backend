@@ -42,6 +42,22 @@ export class ClubRepository {
     return allClub;
   }
 
+  async findClubToday(){
+    const today = new Date().toDateString();
+    console.log(today)
+
+    //해당 동아리 제외하고 같은 카테고리 내에서 랜덤추출 3개
+    const clubToday = await this.clubModel.aggregate([
+      { $match: {deadline: today}},
+      { $project: {_id:0, clubId:1, name: 1}},
+    ])
+
+    console.log(clubToday)
+
+    return clubToday;
+
+  }
+
   async saveClub(club: Club){
     await this.clubModel.create(club);
   }
