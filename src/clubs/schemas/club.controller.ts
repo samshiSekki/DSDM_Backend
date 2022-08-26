@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Res, Param, NotFoundException, HttpStatus, Body, Query } from "@nestjs/common";
 import { ExcelService } from "src/excel/excel.service";
-import { ApiResponse, ApiParam, ApiOperation} from '@nestjs/swagger';
+import { ApiResponse, ApiParam, ApiOperation, ApiQuery} from '@nestjs/swagger';
 import { ClubService } from "./club.service";
 import { ClubDetailDto } from "src/dto/ClubDetailDto.dto";
 import { Suggestion } from "./suggestion.entitiy";
@@ -22,6 +22,31 @@ export class ClubController {
 
   @Get("/clubs")
   @ApiOperation({summary: '동아리 전체 목록 조회 API'})
+  @ApiQuery({
+    name: 'activityDay',
+    required: false,
+    description: '활동요일별  activityDay=화,목',
+  })
+  @ApiQuery({
+    name: 'period',
+    required: false,
+    description: '기간별  period=1: 3개월 이하, period=2: 4-6개월, period=3: 7개월-1년, period=4: 1년 이상',
+  })
+  @ApiQuery({
+    name: 'online',
+    required: false,
+    description: '온오프라인별  online=1: 온라인, online=2: 오프라인, online=3: 온/오프라인',
+  })
+  @ApiQuery({
+    name: 'recruiting',
+    required: false,
+    description: '모집중 여부  recruiting=true: 모집중, recruiting=false: 마감',
+  })
+  @ApiQuery({
+    name: 'category',
+    required: false,
+    description: '대분류 카테고리별 \n category=IT, 광고, 기획, 경제/경영, 광고/마케팅, 건축, 어학, 기타, 발표, 문화/공연, 경영',
+  })
   @ApiResponse({status: 200})
   async getClubs(@Query() query){
     return this.clubService.getClubs(query);
@@ -32,7 +57,6 @@ export class ClubController {
   @ApiResponse({status: 200})
   async getClubsToday(@Res() res){
     const todayClub = await this.clubService.getClubsToday();
-    // if(todayClub?.length)
     return res.status(HttpStatus.OK).json({todayClub});
   }
 

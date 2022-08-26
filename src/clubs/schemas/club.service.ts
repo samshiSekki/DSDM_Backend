@@ -20,10 +20,10 @@ export class ClubService {
   }
 
   async getClubs(@Query() query) {
-    const allClub = new Array();
     let allClubs = await this.clubRepository.getAllClub(); // 전체 데이터 다가져옴
     const { category, recruiting, period, activityDay, online } = query;
 
+    // 카테고리로 한번 필터링
     if(category){
       const categories = category.indexOf(",")>=0 ? category.split(",") : category;
       allClubs = allClubs.filter(club => categories.includes(club.mainCategory))
@@ -36,138 +36,118 @@ export class ClubService {
 
     if(online){
       const onlineStatus = online.indexOf(",")>=0 ? online.split(",") : online;
-      allClubs = allClubs.filter(club => onlineStatus.includes((club.online).toString()))
+      allClubs = allClubs.filter(club => onlineStatus.includes((club.online)))
     }
 
-
-// 3개월
-// 1년
-// 5개월
-// 2년
-// 3학기 -> 1년 반 
-
-// 학기단위 모집, 1년 활동시 정회원 자격 부여
-// 23년 1학기까지
-
-// 17주 = 4개월 
-
-
-    // 3개월 이하 / 4-6개월 / 7개월-1년 / 1년 이상
-    // period=1,2,3,4
+    // filteredClubByPeriod -> 기간 필터링된 배열 저장 
     let filteredClubByPeriod = new Array();
-
+    let copiedClubs;
     if(period){
       const periods = period.indexOf(",")>=0 ? period.split(",") : period;
       const regex = /[^0-9]/g;
-      let copiedClubs = JSON.parse(JSON.stringify(allClubs));
-      // 1,2 개월 -> 6개월 미만인거 다 ...
-      for(let i=0;i<periods.length;i++){
+      copiedClubs = JSON.parse(JSON.stringify(allClubs)); // 전체 데이터 깊은 복사 -> copiedClubs
+      for(let i=0;i<periods.length;i++){ // 필터링 기간 배열 
         if(periods[i] == 1){
-          for(let club of copiedClubs){
-            let period = club.period
+          for(let j=0;j<copiedClubs.length;j++){
+            let period = copiedClubs[j].period
             if(period != null){
               let result = parseInt((period || "").replace(regex, ""))
-              if(result <= 3 && period.includes("개월")){
-                filteredClubByPeriod.push(club);
-                copiedClubs.splice(i,1);
+              if((result <= 3 && period.includes("개월")) || 
+                  (result/4 <=3 && period.includes("주"))){
+                filteredClubByPeriod.push(copiedClubs[j]);
+                copiedClubs.splice(j,1)
               }
-              else if(result/4 <=3 && period.includes("주")){
-                filteredClubByPeriod.push(club);
-                copiedClubs.splice(i,1);
-              } 
             }
           }
         } 
         else if (periods[i] == 2){ // 4-6개월
-          for(let club of copiedClubs){
-            let period = club.period
+          for(let j=0;j<copiedClubs.length;j++){
+            let period = copiedClubs[j].period
             if(period != null){
               let result = parseInt((period || "").replace(regex, "")) // 숫자만 추출
-      
-              if((result >=4 && result<=6) && period.includes("개월")){
-                filteredClubByPeriod.push(club);
-                copiedClubs.splice(i,1);
-              }
-              else if(period.includes("학기") && result == 1){
-                filteredClubByPeriod.push(club);
-                copiedClubs.splice(i,1);
-              }
-              else if(period.includes("주") && result/4 <=6){
-                filteredClubByPeriod.push(club);
-                copiedClubs.splice(i,1);
+              if((result >=4 && result<=6) && period.includes("개월") ||
+                  (period.includes("학기") && result == 1) ||
+                  (period.includes("주") && result/4 <=6)){
+                    filteredClubByPeriod.push(copiedClubs[j]);
+                    copiedClubs.splice(j,1)
               }
             }
           }
         }
         else if (periods[i] == 3){ // 7-11개월
-          for(let club of copiedClubs){
-            let period = club.period
+          for(let j=0;j<copiedClubs.length;j++){
+            let period = copiedClubs[j].period
             if(period != null){ 
               let result = parseInt((period || "").replace(regex, "")) // 숫자만 추출
-      
-              if((result >=7 && result<=11) && period.includes("개월")){
-                filteredClubByPeriod.push(club);
-                copiedClubs.splice(i,1);
-              }
-              else if((result/4 >=7 && result/4 <=11) && period.includes("주")){
-                filteredClubByPeriod.push(club);
-                copiedClubs.splice(i,1);
+              if((result >=7 && result<=11) && period.includes("개월") ||
+                (result/4 >=7 && result/4 <=11) && period.includes("주")){
+                filteredClubByPeriod.push(copiedClubs[j]);
+                copiedClubs.splice(j,1)
               }
             }
           }
         }
         else if (periods[i] == 4){ // 7-11개월
-          for(let club of copiedClubs){
-            let period = club.period
+          for(let j=0;j<copiedClubs.length;j++){
+            let period = copiedClubs[j].period
             if(period != null){ 
               let result = parseInt((period || "").replace(regex, "")) // 숫자만 추출
-      
-              if((result >= 12) && period.includes("개월"))
-                filteredClubByPeriod.push(club);
-              else if((result/4 >=12) && period.includes("주"))
-                filteredClubByPeriod.push(club);
-              else if((result >= 2) && period.includes("학기")){
-                filteredClubByPeriod.push(club);
-              }
-              else if((result >=1) && period.includes("년")){
-                filteredClubByPeriod.push(club);
+              if((result >= 12) && period.includes("개월") ||
+                ((result/4 >=12) && period.includes("주")) ||
+                ((result >= 2) && period.includes("학기")) ||
+                ((result >=1) && period.includes("년"))){
+                  filteredClubByPeriod.push(copiedClubs[j]);
+                  copiedClubs.splice(j,1)
               }
             }
           }
         }
       }
-      return filteredClubByPeriod
     }
 
-    let filteredClub = new Array();
+    // filteredClubByActivityDay -> 활동일자 필터링된 배열 저장 
+    let filteredClubByActivityDay = new Array();
+    if(filteredClubByPeriod.length == 0)  // 기간 필터링이 안됐으면 -> allClubs 로 필터링해야함
+      allClubs = await this.filteringByActivityDay(activityDay, allClubs); 
+    else // 기간 필터링이 됐으면 -> filteredClubByPeriod 로 필터링해야함
+      filteredClubByPeriod = await this.filteringByActivityDay(activityDay, filteredClubByPeriod); 
 
+    let finalClub = new Object();
+    if(filteredClubByPeriod.length==0) 
+      return await this.makeFinalClub(finalClub, allClubs)
+    else if(filteredClubByPeriod.length !=0 && filteredClubByActivityDay.length ==0)
+      return await this.makeFinalClub(finalClub, filteredClubByPeriod)
+    else if(filteredClubByPeriod.length !=0 && filteredClubByActivityDay.length !=0)
+      return await this.makeFinalClub(finalClub, filteredClubByActivityDay)
+  }
+
+  async filteringByActivityDay(activityDay: any, filteredArray: any){
     if(activityDay){
       const activityDays = activityDay.indexOf(",")>=0 ? activityDay.split(",") : activityDay;
-    
-      if(!(activityDay.indexOf(",")>=0))
-        allClubs = allClubs.filter(club => (club.activityDay).includes(activityDay));
+      if(!(activityDay.indexOf(",")>=0)){
+        filteredArray = filteredArray.filter(club => (club.activityDay).includes(activityDay));
+      }
       else {
-        for(let club of allClubs){
+        for(let club of filteredArray){
           for(let activityDay of activityDays){
             if((club.activityDay).includes(activityDay)){
-              filteredClub.push(club);
+              filteredArray.push(club);
               break;
             }
           }
         }
       }
     }
+    return filteredArray
+  }
 
-    if(filteredClub.length == 0 )
-      return allClubs;
-    
-    for(let club of filteredClub){
+  async makeFinalClub(finalClub: object, finalObject: any){
+    for(let club of finalObject){
       const {mainCategory} = club;
-      allClub[mainCategory] = new Array();
+      finalClub[mainCategory] = new Array();
     }
-
-    console.log(allClub)
-    for(let club of filteredClub){
+    
+    for(let club of finalObject){
       const {clubId, name, recruiting, subCategory, membershipFee, online, period, activityDay, selectionProcess} = club;
       const clubInfo = {
           clubId,
@@ -180,9 +160,9 @@ export class ClubService {
           activityDay,
           selectionProcess
       }
-      allClub[club.mainCategory].push(clubInfo)
+      finalClub[club.mainCategory].push(clubInfo)
     }
-    return allClub
+    return finalClub;
   }
 
   async getClubsToday() {
