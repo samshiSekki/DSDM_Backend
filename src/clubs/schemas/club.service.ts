@@ -36,7 +36,7 @@ export class ClubService {
 
     if(online){
       const onlineStatus = online.indexOf(",")>=0 ? online.split(",") : online;
-      allClubs = allClubs.filter(club => onlineStatus.includes((club.online).toString()))
+      allClubs = allClubs.filter(club => onlineStatus.includes((club.online)))
     }
 
     // filteredClubByPeriod -> 기간 필터링된 배열 저장 
