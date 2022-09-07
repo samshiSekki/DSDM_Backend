@@ -165,7 +165,7 @@ export class ClubService {
     return finalClub;
   }
 
-  async getClubsToday() {
-    return this.clubRepository.findClubToday();
+  async getRecruitingClub() {
+    return this.clubRepository.findRecruitingClub();
   }
 }
