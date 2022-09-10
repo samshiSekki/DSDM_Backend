@@ -117,7 +117,6 @@ export class ClubService {
 
   async filteringByActivityDay(activityDay: any, filteredArray: any){
     if(activityDay && filteredArray.length != 0){ 
-      console.log("못올텐데")
       const activityDays = activityDay.indexOf(",")>=0 ? activityDay.split(",") : activityDay;
       if(!(activityDay.indexOf(",")>=0)){
         filteredArray = filteredArray.filter(club => (club.activityDay).includes(activityDay));
@@ -125,7 +124,6 @@ export class ClubService {
       }
       else {
         let newFilteredArray = new Array();
-        console.log(filteredArray.length)
         for(let club of filteredArray){
           for(let activityDay of activityDays){
             if((club.activityDay).includes(activityDay)){
