@@ -60,7 +60,7 @@ export class Club {
     description: '접수 마감일'
   })
   @Prop()
-  deadline: string // ** date로 해두었다가 프론트에서 계산
+  deadline: string
 
   @ApiProperty({
     type: String,
@@ -74,7 +74,7 @@ export class Club {
     description: '온/오프라인'
   })
   @Prop()
-  online: number // ** 숫자로 변경 1. 병행 2. 온라인 3. 오프라인
+  online: number
 
   @ApiProperty({
     type: String,
@@ -95,7 +95,7 @@ export class Club {
     description: '동아리 소개'
   })
   @Prop()
-  introduction: string // ** 긴 텍스트 필요한지 확인
+  introduction: string
 
   @ApiProperty({
     type: Array,

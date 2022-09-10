@@ -7,8 +7,8 @@ export class ClubDetailDto{
     @ApiProperty({
         type: [Club],
         description: 'Club 객체 배열',
-      })
-      Club: Club[];
+    })
+    Club: Club[];
 
     @ApiProperty({
         type: [RecommendClubDto],
