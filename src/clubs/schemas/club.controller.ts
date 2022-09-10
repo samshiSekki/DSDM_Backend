@@ -52,12 +52,16 @@ export class ClubController {
     return this.clubService.getClubs(query);
   }
 
-  @Get("/clubs/today")
-  @ApiOperation({summary: '오늘 마감인 동아리 조회 API'})
+  @Get("/clubs/recruit")
+  @ApiOperation({summary: '모집중 동아리 조회 API'})
   @ApiResponse({status: 200})
   async getClubsToday(@Res() res){
-    const todayClub = await this.clubService.getClubsToday();
-    return res.status(HttpStatus.OK).json({todayClub});
+    const recruitingClub = await this.clubService.getRecruitingClub();
+    if(recruitingClub?.length == 0){
+      const notRecruit = "모집중인 동아리가 없습니다."
+      return res.status(HttpStatus.OK).json({notRecruit});
+    }
+    return res.status(HttpStatus.OK).json({recruitingClub});
   }
 
   @Post(process.env.ALL_SUGGEST_POST_URL)
