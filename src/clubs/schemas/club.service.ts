@@ -22,7 +22,6 @@ export class ClubService {
   async getClubs(@Query() query) {
     let allClubs = await this.clubRepository.getAllClub(); // 전체 데이터 다가져옴
     const { category, recruiting, period, activityDay, online } = query;
-
     // 카테고리로 한번 필터링
     if(category){
       const categories = category.indexOf(",")>=0 ? category.split(",") : category;
@@ -35,7 +34,7 @@ export class ClubService {
     }
 
     if(online){
-      const onlineStatus = online.indexOf(",")>=0 ? online.split(",") : online;
+      const onlineStatus = online.indexOf(",")>=0 ? online.split(",").map(Number) : online;
       allClubs = allClubs.filter(club => onlineStatus.includes((club.online)))
     }
 
@@ -108,7 +107,7 @@ export class ClubService {
     // filteredClubByActivityDay -> 활동일자 필터링된 배열 저장 
     let filteredClubByActivityDay = new Array();
     filteredClubByActivityDay = await this.filteringByActivityDay(activityDay, filteredClubByPeriod); 
-    
+
     let finalClub = new Object();
     if(period == null && activityDay == null) 
       return await this.makeFinalClub(finalClub, allClubs)
