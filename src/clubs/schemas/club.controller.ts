@@ -14,8 +14,7 @@ export class ClubController {
     private readonly clubService: ClubService
   ) {}
 
-
-  @Get("/data")
+  @Get(process.env.EXCEL_ROUTER)
   async readExcelFile() {
     await this.excelService.readExcelFile();
   }

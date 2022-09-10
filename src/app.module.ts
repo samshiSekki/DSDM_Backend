@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { ClubController } from './clubs/schemas/club.controller';
@@ -21,7 +19,7 @@ import { Suggestion, SuggestionSchema } from './clubs/schemas/suggestion.entitiy
     MongooseModule.forFeature([{ name: Club.name, schema: ClubSchema }]),
     MongooseModule.forFeature([{ name: Suggestion.name, schema: SuggestionSchema}]),
   ],
-  controllers: [AppController, ClubController],
-  providers: [AppService, ClubService, ClubRepository, ExcelService],
+  controllers: [ClubController],
+  providers: [ClubService, ClubRepository, ExcelService],
 })
 export class AppModule {}

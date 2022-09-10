@@ -1,5 +1,4 @@
 import { Injectable, Query } from '@nestjs/common';
-import { type } from 'os';
 import { ClubRepository } from './club.repository';
 
 @Injectable()
