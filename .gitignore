@@ -37,3 +37,4 @@ lerna-debug.log*
 .env
 samshisekki_club.xlsx
 samshisekki_club_test.xlsx
+build.zip
