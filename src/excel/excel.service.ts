@@ -14,7 +14,7 @@ export class ExcelService {
       for(let i in rows){
         let name = rows[i][0];
         let mainCategory = rows[i][1];
-        let categories = rows[i][2].split("/");
+        let categories = (rows[i][2] || '').split("/");
         let finalCategory = new Array();
 
         for(let category of categories){ // category = 개발(백엔드, 웹 프론트엔드)  / 기획 / 디자인
