@@ -1,4 +1,5 @@
 import { Injectable, Query } from '@nestjs/common';
+import { type } from 'os';
 import { ClubRepository } from './club.repository';
 
 @Injectable()
@@ -29,13 +30,13 @@ export class ClubService {
     }
 
     if(recruiting){
-      const recruitings = recruiting.indexOf(",")>=0 ? recruiting.split(",") : recruiting;
-      allClubs = allClubs.filter(club => recruitings.includes(club.recruiting))
+      const recruitings = recruiting.indexOf(",")>=0 ? recruiting.split(",").map(String) : recruiting;
+      allClubs = allClubs.filter(club => recruitings.includes(club.recruiting.toString()))
     }
 
     if(online){
       const onlineStatus = online.indexOf(",")>=0 ? online.split(",").map(Number) : online;
-      allClubs = allClubs.filter(club => onlineStatus.includes((club.online)))
+      allClubs = allClubs.filter(club => onlineStatus.includes(club.online))
     }
 
     // filteredClubByPeriod -> 기간 필터링된 배열 저장 
