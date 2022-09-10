@@ -1,4 +1,5 @@
 import { Injectable, Query } from '@nestjs/common';
+import { type } from 'os';
 import { ClubRepository } from './club.repository';
 
 @Injectable()
@@ -29,13 +30,13 @@ export class ClubService {
     }
 
     if(recruiting){
-      const recruitings = recruiting.indexOf(",")>=0 ? recruiting.split(",") : recruiting;
-      allClubs = allClubs.filter(club => recruitings.includes(club.recruiting))
+      const recruitings = recruiting.indexOf(",")>=0 ? recruiting.split(",").map(String) : recruiting;
+      allClubs = allClubs.filter(club => recruitings.includes(club.recruiting.toString()))
     }
 
     if(online){
       const onlineStatus = online.indexOf(",")>=0 ? online.split(",").map(Number) : online;
-      allClubs = allClubs.filter(club => onlineStatus.includes((club.online)))
+      allClubs = allClubs.filter(club => onlineStatus.includes(club.online))
     }
 
     // filteredClubByPeriod -> 기간 필터링된 배열 저장 
@@ -116,7 +117,6 @@ export class ClubService {
 
   async filteringByActivityDay(activityDay: any, filteredArray: any){
     if(activityDay && filteredArray.length != 0){ 
-      console.log("못올텐데")
       const activityDays = activityDay.indexOf(",")>=0 ? activityDay.split(",") : activityDay;
       if(!(activityDay.indexOf(",")>=0)){
         filteredArray = filteredArray.filter(club => (club.activityDay).includes(activityDay));
@@ -124,7 +124,6 @@ export class ClubService {
       }
       else {
         let newFilteredArray = new Array();
-        console.log(filteredArray.length)
         for(let club of filteredArray){
           for(let activityDay of activityDays){
             if((club.activityDay).includes(activityDay)){
