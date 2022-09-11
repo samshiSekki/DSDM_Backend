@@ -38,10 +38,10 @@ export class ClubService {
       allClubs = allClubs.filter(club => onlineStatus.includes(club.online))
     }
 
-    // filteredClubByPeriod -> 기간 필터링된 배열 저장 
     let filteredClubByPeriod = new Array();
+    let filteredClubByActivityDay = new Array();
     let copiedClubs;
-    if(period){
+    if(period){ // 기간필터링이 있는 경우 (기간이 있는데 해당되는 게 없는 경우도 포함)
       const periods = period.indexOf(",")>=0 ? period.split(",") : period;
       const regex = /[^0-9]/g;
       copiedClubs = JSON.parse(JSON.stringify(allClubs)); // 전체 데이터 깊은 복사 -> copiedClubs
@@ -102,11 +102,11 @@ export class ClubService {
           }
         }
       }
+      filteredClubByActivityDay = await this.filteringByActivityDay(activityDay, filteredClubByPeriod); 
     }
-
-    // filteredClubByActivityDay -> 활동일자 필터링된 배열 저장 
-    let filteredClubByActivityDay = new Array();
-    filteredClubByActivityDay = await this.filteringByActivityDay(activityDay, filteredClubByPeriod); 
+    else { // 기간필터링이 없는 경우
+      filteredClubByActivityDay = await this.filteringByActivityDay(activityDay, allClubs); 
+    }
 
     let finalClub = new Object();
     if(period == null && activityDay == null) 
