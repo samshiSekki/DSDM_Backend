@@ -1,5 +1,6 @@
 import { Injectable, Query } from '@nestjs/common';
 import { ClubRepository } from './club.repository';
+import { Suggestion } from './suggestion.entitiy';
 
 @Injectable()
 export class ClubService {
@@ -11,11 +12,11 @@ export class ClubService {
     return this.clubRepository.findClubOne(clubId);
   }
 
-  async addClubInfo(clubId: number, createSuggestionDto){
+  async addClubInfo(clubId: number, createSuggestionDto): Promise<Suggestion> {
     return this.clubRepository.saveClubInfo(clubId, createSuggestionDto);
   }
 
-  async addSuggestion(createSuggestionDto) {
+  async addSuggestion(createSuggestionDto): Promise<Suggestion>  {
     return this.clubRepository.saveSuggestion(createSuggestionDto);
   }
 
