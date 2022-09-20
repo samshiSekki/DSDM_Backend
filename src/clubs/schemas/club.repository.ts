@@ -78,12 +78,10 @@ export class ClubRepository {
     createSuggestionByClubDto.name = club.name;
     const suggestion = await new this.suggestionModel(createSuggestionByClubDto);
     return suggestion.save();
-    // return suggestion;
   }
 
   async saveSuggestion(createSuggestionDto):Promise<Suggestion> {
     const suggestion = await new this.suggestionModel(createSuggestionDto);
     return suggestion.save();
-    // return suggestion;
   }
 }

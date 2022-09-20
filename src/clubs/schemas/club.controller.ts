@@ -68,8 +68,6 @@ export class ClubController {
   @ApiResponse({ status: 201, type: Suggestion })
   async addSuggetion(@Body() createSuggestionDto:CreateSuggestionDto, @Res() res) {
     const suggestion = await this.clubService.addSuggestion(createSuggestionDto);
-    console.log("dto: ", createSuggestionDto)
-    console.log("suggestion: ", suggestion)
     return res.status(HttpStatus.CREATED).json(suggestion);
   }
 
@@ -93,11 +91,9 @@ export class ClubController {
 
   @Post(process.env.CLUB_SUGGEST_POST_URL)
   @ApiOperation({ summary: '동아리 요청사항 전송 API(상세페이지)'})
-  // @ApiResponse({ status: 200, type: Suggestion })
-  addClubInfo(@Param('id') clubId: number, @Body() createSuggestionByClubDto:CreateSuggestionByClubDto):Promise<Suggestion> {
-    console.log("dto: ", createSuggestionByClubDto)
-    return this.clubService.addClubInfo(clubId, createSuggestionByClubDto);
-    
-    // return res.status(HttpStatus.OK).json(suggestion);
+  @ApiResponse({ status: 201, type: Suggestion })
+  async addClubInfo(@Param('id') clubId: number, @Body() createSuggestionByClubDto:CreateSuggestionByClubDto, @Res() res):Promise<Suggestion> {
+    const suggestion = await this.clubService.addClubInfo(clubId, createSuggestionByClubDto);
+    return res.status(HttpStatus.CREATED).json(suggestion);
   }
 }
