@@ -73,17 +73,17 @@ export class ClubRepository {
     return result;
   }
 
-  async saveClubInfo(clubId, createSuggestionByClubDto) {
+  async saveClubInfo(clubId, createSuggestionByClubDto):Promise<Suggestion> {
     const club = await this.clubModel.findOne({clubId: clubId});
     createSuggestionByClubDto.name = club.name;
     const suggestion = await new this.suggestionModel(createSuggestionByClubDto);
-    suggestion.save();
-    return suggestion;
+    return suggestion.save();
+    // return suggestion;
   }
 
-  async saveSuggestion(createSuggestionDto) {
+  async saveSuggestion(createSuggestionDto):Promise<Suggestion> {
     const suggestion = await new this.suggestionModel(createSuggestionDto);
-    suggestion.save();
-    return suggestion;
+    return suggestion.save();
+    // return suggestion;
   }
 }
