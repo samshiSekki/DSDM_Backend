@@ -164,4 +164,8 @@ export class ClubService {
   async getRecruitingClub() {
     return this.clubRepository.findRecruitingClub();
   }
+
+  async updateClubRecruit(clubId, updateClubRecruitDto) {
+    return this.clubRepository.updateClubRecruit(clubId, updateClubRecruitDto)
+  }
 }
