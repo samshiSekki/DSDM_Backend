@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Res, Param, NotFoundException, HttpStatus, Body, Query } from "@nestjs/common";
+import { Controller, Get, Post, Res, Param, NotFoundException, HttpStatus, Body, Query, Patch } from "@nestjs/common";
 import { ExcelService } from "src/excel/excel.service";
 import { ApiResponse, ApiParam, ApiOperation, ApiQuery} from '@nestjs/swagger';
 import { ClubService } from "./club.service";
 import { ClubDetailDto } from "src/dto/ClubDetailDto.dto";
+import { UpdateClubRecruitDto } from "src/dto/UpdateClubRecruitDto.dto";
 import { Suggestion } from "./suggestion.entitiy";
 import { CreateSuggestionDto, CreateSuggestionByClubDto } from "src/dto/CreateSuggestionDto.dto";
 require("dotenv").config();
@@ -95,5 +96,12 @@ export class ClubController {
   async addClubInfo(@Param('id') clubId: number, @Body() createSuggestionByClubDto:CreateSuggestionByClubDto, @Res() res):Promise<Suggestion> {
     const suggestion = await this.clubService.addClubInfo(clubId, createSuggestionByClubDto);
     return res.status(HttpStatus.CREATED).json(suggestion);
+  }
+
+  @Patch(process.env.CLUB_RECRUIT_UPDATE_URL)
+  @ApiOperation({ summary: '동아리 모집 업데이트'})
+  async updateClubRecruit(@Param('id') clubId:number, @Body() updateClubRecruitDto:UpdateClubRecruitDto, @Res() res){
+    const recruit = await this.clubService.updateClubRecruit(clubId, updateClubRecruitDto);
+    return res.status(HttpStatus.OK).json(recruit);
   }
 }

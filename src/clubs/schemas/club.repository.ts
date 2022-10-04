@@ -53,6 +53,22 @@ export class ClubRepository {
 
   }
 
+  // async RecruitngClub(){
+  //   const today = new Date();
+
+  //   const year = today.getFullYear();
+  //   const month = ('0' + (today.getMonth() + 1)).slice(-2);
+  //   const day = ('0' + today.getDate()).slice(-2);
+  
+  //   const deadline = year + '-' + month  + '-' + day;
+
+  //   const clubs = await this.clubModel.aggregate({
+  //     {$match: {deadline: deadline}},
+  //   })
+
+  //   return clubs
+  // }
+
   async saveClub(club: Club){
     await this.clubModel.create(club);
   }
@@ -83,5 +99,13 @@ export class ClubRepository {
   async saveSuggestion(createSuggestionDto):Promise<Suggestion> {
     const suggestion = await new this.suggestionModel(createSuggestionDto);
     return suggestion.save();
+  }
+
+  async updateClubRecruit(clubId, updateClubRecruitDto) {
+    return await this.clubModel.findOneAndUpdate(
+      {clubId: clubId},
+      updateClubRecruitDto,
+      { new: true },
+    );
   }
 }
